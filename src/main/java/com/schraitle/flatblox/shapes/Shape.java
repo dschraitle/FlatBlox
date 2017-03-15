@@ -21,7 +21,7 @@ public interface Shape {
 	 * change the position of the shape
 	 * @param newPosition the new position of the shape
 	 */
-	public void move(Coordinate newPosition);
+	public void setPosition(Coordinate newPosition);
 	
 	/**
 	 * checks to see if this shape will overlap with the given shape
@@ -29,4 +29,9 @@ public interface Shape {
 	 * @return true if the shapes will overlap, false otherwise
 	 */
 	public boolean overlapsWith(Shape otherShape);
+	
+	/**
+	 * @return the area taken up by this shape
+	 */
+	public long getArea();
 }

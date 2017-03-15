@@ -2,6 +2,7 @@ package com.schraitle.flatblox.playground;
 
 import java.util.List;
 
+import com.schraitle.flatblox.shapes.Coordinate;
 import com.schraitle.flatblox.shapes.Shape;
 
 /**
@@ -16,16 +17,20 @@ public interface CoordinateSystem {
 		/** the shape would have gone out of the boundaries of the system */
 		OUT_OF_BOUNDS,
 		/** the shape would have overlapped with another shape */
-		OVERLAP
+		OVERLAP,
+		/** the shape is null */
+		NULL_SHAPE
 	}
 
 	/**
 	 * adds a shape to the space at the given coordinate
 	 * @param shape the shape to be added
-	 * @param coordinate the position to add the shape
+	 * @param position the position to add the shape
 	 * @return {@link InsertStatus#SUCCESS} if successful, otherwise the appropriate status will be returned
 	 */
-	public InsertStatus add(Shape shape);
+	public InsertStatus add(Shape shape, Coordinate position);
+	
+	public InsertStatus move(Shape shape, Coordinate newPosition);
 	
 	/**
 	 * @return list of all shapes represented in system
@@ -35,5 +40,5 @@ public interface CoordinateSystem {
 	/**
 	 * @return the amount of free space left in the system
 	 */
-	public double getFreeSpace();
+	public long getFreeSpace();
 }
