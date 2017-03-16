@@ -19,18 +19,21 @@ public interface CoordinateSystem {
 		/** the shape would have overlapped with another shape */
 		OVERLAP,
 		/** the shape is null */
-		NULL_SHAPE
+		NULL_SHAPE,
+		/** there are no coordinates in the shape */
+		NO_COORDINATES
 	}
 
 	/**
 	 * adds a shape to the space at the given coordinate
 	 * @param shape the shape to be added
-	 * @param position the position to add the shape
 	 * @return {@link InsertStatus#SUCCESS} if successful, otherwise the appropriate status will be returned
 	 */
-	public InsertStatus add(Shape shape, Coordinate position);
+	public InsertStatus add(Shape shape);
 	
 	public InsertStatus move(Shape shape, Coordinate newPosition);
+	
+	public InsertStatus resize(Shape shape, int... args);
 	
 	/**
 	 * @return list of all shapes represented in system
