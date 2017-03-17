@@ -44,7 +44,7 @@ public abstract class Shape {
 	/**
 	 * @return the area taken up by this shape
 	 */
-	public abstract long getArea();
+	public abstract double getArea();
 
 	/**
 	 * gets the height and width of the shape
@@ -60,11 +60,11 @@ public abstract class Shape {
 	 */
 	public abstract double getRadius();
 
-	public abstract int[] getProperties();
+	public abstract int[] getSizeProperties();
 
 	public abstract void changeSize(int... newSize);
 
-	protected double getDistanceBetween(Coordinate pos1, Coordinate pos2) {
+	protected static double getDistanceBetween(Coordinate pos1, Coordinate pos2) {
 		double xs = Math.pow(pos2.getX() - pos1.getX(), 2);
 		double ys = Math.pow(pos2.getY() - pos1.getY(), 2);
 		return Math.sqrt(xs + ys);

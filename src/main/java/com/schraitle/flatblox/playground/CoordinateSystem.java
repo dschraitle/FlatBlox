@@ -43,5 +43,5 @@ public interface CoordinateSystem {
 	/**
 	 * @return the amount of free space left in the system
 	 */
-	public long getFreeSpace();
+	public double getFreeSpace();
 }

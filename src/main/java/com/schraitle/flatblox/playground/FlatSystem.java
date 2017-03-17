@@ -6,12 +6,11 @@ import java.util.List;
 import com.schraitle.flatblox.shapes.Coordinate;
 import com.schraitle.flatblox.shapes.Dimension;
 import com.schraitle.flatblox.shapes.Shape;
-import com.schraitle.flatblox.shapes.rectangle.Rectangle;
 
 public class FlatSystem implements CoordinateSystem {
 	private int width;
 	private int height;
-	private long freeSpace;
+	private double freeSpace;
 	private List<Shape> shapes;
 
 	public FlatSystem(int width, int height) {
@@ -47,13 +46,13 @@ public class FlatSystem implements CoordinateSystem {
 		boolean isOut = false;
 		
 		//crossing the left
-		isOut = isOut || position.getX() - (size.getWidth() / 2) < 0;
+		isOut = isOut || position.getX() - (size.getWidth() / 2.0) < 0;
 		//crossing the right
-		isOut = isOut || position.getX() + (size.getWidth() / 2) > this.width;
+		isOut = isOut || position.getX() + (size.getWidth() / 2.0) > this.width;
 		//crossing the top
-		isOut = isOut || position.getY() + (size.getHeight() / 2) > this.height;
+		isOut = isOut || position.getY() + (size.getHeight() / 2.0) > this.height;
 		//crossing the bottom
-		isOut = isOut || position.getY() - (size.getHeight() / 2) < 0;
+		isOut = isOut || position.getY() - (size.getHeight() / 2.0) < 0;
 		
 		return isOut;
 	}
@@ -84,7 +83,7 @@ public class FlatSystem implements CoordinateSystem {
 		return shapes;
 	}
 
-	public long getFreeSpace() {
+	public double getFreeSpace() {
 		return freeSpace;
 	}
 
@@ -105,7 +104,7 @@ public class FlatSystem implements CoordinateSystem {
 
 	@Override
 	public InsertStatus resize(Shape shape, int... properties) {
-		int[] oldProps = shape.getProperties();
+		int[] oldProps = shape.getSizeProperties();
 		removeShapeFromSystem(shape);
 		shape.changeSize(properties);
 		

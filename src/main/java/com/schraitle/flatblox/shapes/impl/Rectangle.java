@@ -1,6 +1,5 @@
-package com.schraitle.flatblox.shapes.rectangle;
+package com.schraitle.flatblox.shapes.impl;
 
-import com.schraitle.flatblox.shapes.Coordinate;
 import com.schraitle.flatblox.shapes.Dimension;
 import com.schraitle.flatblox.shapes.Shape;
 
@@ -14,7 +13,7 @@ public class Rectangle extends Shape {
 	}
 
 	@Override
-	public long getArea() {
+	public double getArea() {
 		return height * width;
 	}
 
@@ -38,7 +37,7 @@ public class Rectangle extends Shape {
 	}
 
 	@Override
-	public int[] getProperties() {
+	public int[] getSizeProperties() {
 		return new int[]{width, height};
 	}
 

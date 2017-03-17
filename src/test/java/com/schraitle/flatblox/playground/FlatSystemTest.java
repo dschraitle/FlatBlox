@@ -2,37 +2,17 @@ package com.schraitle.flatblox.playground;
 
 import static org.junit.Assert.assertEquals;
 
-import org.junit.Before;
 import org.junit.Test;
 
+import com.schraitle.flatblox.ShapeTestingBase;
 import com.schraitle.flatblox.playground.CoordinateSystem.InsertStatus;
 import com.schraitle.flatblox.shapes.Coordinate;
 import com.schraitle.flatblox.shapes.Shape;
-import com.schraitle.flatblox.shapes.rectangle.Rectangle;
+import com.schraitle.flatblox.shapes.impl.Rectangle;
 
-public class FlatSystemTest {
+public class FlatSystemTest extends ShapeTestingBase {
 
-	private static final int SHAPE_WIDTH = 5;
-	private static final int SHAPE_HEIGHT = 7;
-	private static final int SHAPE_AREA = SHAPE_WIDTH * SHAPE_HEIGHT;
-	private static final int DEFAULT_HEIGHT = 25;
-	private static final int DEFAULT_WIDTH = 20;
-	private static final int DEFAULT_FREE_SPACE = DEFAULT_WIDTH * DEFAULT_HEIGHT;
-
-	Coordinate firstPosition = new Coordinate(5, 5);
-	Coordinate secondPosition = new Coordinate(10, 10);
-	FlatSystem system;
-
-	Shape defaultShape;
-	private Coordinate slightlyOOBPosition = new Coordinate(1, SHAPE_HEIGHT);
-	private Coordinate oobPosition = new Coordinate(DEFAULT_WIDTH + 3, DEFAULT_HEIGHT);
-
-	@Before
-	public void setup() {
-		system = new FlatSystem(DEFAULT_WIDTH, DEFAULT_HEIGHT);
-		defaultShape = new Rectangle(SHAPE_WIDTH, SHAPE_HEIGHT);
-		defaultShape.setPosition(firstPosition);
-	}
+	private static final double DOUBLE_EPSILON = .001;
 
 	@Test
 	public void flatSystemDoesntAddNullShape() {
@@ -41,7 +21,7 @@ public class FlatSystemTest {
 
 	@Test
 	public void flatSystemAddsAShape() {
-		successfullyAddShape(defaultShape);
+		successfullyAddShape(rectangle);
 	}
 
 	@Test
@@ -49,13 +29,13 @@ public class FlatSystemTest {
 		Shape secondShape = new Rectangle(5, 5);
 		secondShape.setPosition(firstPosition);
 
-		system.add(defaultShape);
+		system.add(rectangle);
 		addOverlappingShape(secondShape);
 	}
 
 	@Test
 	public void barelyOverlappingShapeFails() {
-		flatSystemAddsAShape();
+		successfullyAddShape(rectangle);
 		Shape secondShape = new Rectangle(5, 5);
 		secondShape.setPosition(new Coordinate(7, 7));
 
@@ -64,39 +44,53 @@ public class FlatSystemTest {
 
 	@Test
 	public void shapeWithPositionOutOfBoundsFails() {
-		defaultShape.setPosition(oobPosition);
-		addOutOfBoundsShape(defaultShape);
+		rectangle.setPosition(oobPosition);
+		addOutOfBoundsShape(rectangle);
 	}
 
 	@Test
 	public void shapeALittleOutOfBoundsFails() {
-		defaultShape.setPosition(slightlyOOBPosition);
-		addOutOfBoundsShape(defaultShape);
+		rectangle.setPosition(slightlyOOBPosition);
+		addOutOfBoundsShape(rectangle);
+	}
+	
+	@Test
+	public void shapeOneUnitOutOfBoundsFails() {
+		rectangle.changeSize(10,10);
+		rectangle.setPosition(new Coordinate(4, 10));
+		addOutOfBoundsShape(rectangle);
+	}
+	
+	@Test
+	public void shapeHalfUnitOutOfBoundsFails() {
+		rectangle.changeSize(5, 5);
+		rectangle.setPosition(new Coordinate(2, 10));
+		addOutOfBoundsShape(rectangle);
 	}
 
 	@Test
 	public void initialFreeSpaceCorrect() {
-		assertEquals("free space should be correct", DEFAULT_FREE_SPACE, system.getFreeSpace());
+		assertEquals("free space should be correct", DEFAULT_FREE_SPACE, system.getFreeSpace(), DOUBLE_EPSILON);
 	}
 
 	@Test
 	public void freeSpaceCorrectAfterAddingAShape() {
-		system.add(defaultShape);
-		assertEquals(DEFAULT_FREE_SPACE - SHAPE_AREA, system.getFreeSpace());
+		system.add(rectangle);
+		assertEquals(DEFAULT_FREE_SPACE - SHAPE_AREA, system.getFreeSpace(), DOUBLE_EPSILON);
 	}
 
 	@Test
 	public void shapeMovesSuccessFully() {
-		flatSystemAddsAShape();
-		assertSuccessfulMove(defaultShape, secondPosition);
-		assertEquals("the shape should now be at secord position", secondPosition, defaultShape.getPosition());
+		successfullyAddShape(rectangle);
+		assertSuccessfulMove(rectangle, secondPosition);
+		assertEquals("the shape should now be at secord position", secondPosition, rectangle.getPosition());
 	}
 
 	@Test
 	public void shapeFailsToMoveOOB() {
-		flatSystemAddsAShape();
-		assertOOBMove(defaultShape, oobPosition);
-		assertOOBMove(defaultShape, slightlyOOBPosition);
+		successfullyAddShape(rectangle);
+		assertOOBMove(rectangle, oobPosition);
+		assertOOBMove(rectangle, slightlyOOBPosition);
 		assertEquals("shape is still in original position", firstPosition, system.getShapes().get(0).getPosition());
 	}
 
@@ -110,38 +104,36 @@ public class FlatSystemTest {
 	
 	@Test
 	public void shapeFailsToOverlapAfterMove() {
-		flatSystemAddsAShape();
+		successfullyAddShape(rectangle);
 		Shape secondShape = new Rectangle(3, 3);
 		secondShape.setPosition(secondPosition);
 		successfullyAddShape(secondShape);
-		assertOverlapMove(defaultShape, secondPosition);
+		assertOverlapMove(rectangle, secondPosition);
+	}
+	
+	@Test
+	public void shapeCanResize() {
+		successfullyAddShape(rectangle);
+		assertShapeResizeSuccess(rectangle, 10, 10);
+		assertEquals("area of shape should be 100", 100, rectangle.getArea(), DOUBLE_EPSILON);
+		assertEquals("free space in system should be less", DEFAULT_FREE_SPACE - 100, system.getFreeSpace(), DOUBLE_EPSILON);
 	}
 
-	private void assertSuccessfulMove(Shape shape, Coordinate position) {
-		InsertStatus moveStatus = system.move(shape, position);
-		assertEquals("the move should have succeeded", InsertStatus.SUCCESS, moveStatus);
+	@Test
+	public void shapeFailsToResizeOOB() {
+		successfullyAddShape(rectangle);
+		double orignalArea = rectangle.getArea();
+		assertShapeResizeOOB(rectangle, 11, 6);
+		assertEquals("the shape should have the original area", orignalArea, rectangle.getArea(), DOUBLE_EPSILON);
 	}
-
-	private void assertOOBMove(Shape shape, Coordinate position) {
-		InsertStatus moveStatus = system.move(shape, position);
-		assertEquals("the move should be out of bounds", InsertStatus.OUT_OF_BOUNDS, moveStatus);
-	}
-
-	private void assertOverlapMove(Shape shape, Coordinate position) {
-		InsertStatus moveStatus = system.move(shape, position);
-		assertEquals("the move should be overlapping", InsertStatus.OVERLAP, moveStatus);
-	}
-
-	private void successfullyAddShape(Shape shape) {
-		assertEquals("add should be successful", InsertStatus.SUCCESS, system.add(shape));
-	}
-
-	private void addOutOfBoundsShape(Shape shape) {
-		assertEquals("shape should be out of bounds", InsertStatus.OUT_OF_BOUNDS, system.add(shape));
-	}
-
-	private void addOverlappingShape(Shape shape) {
-		assertEquals("shape should be overlapping", InsertStatus.OVERLAP, system.add(shape));
+	
+	@Test
+	public void shapeFailsToResizeOverlap() {
+		successfullyAddShape(rectangle);
+		Shape secondShape = new Rectangle(2, 2);
+		secondShape.setPosition(new Coordinate(firstPosition.getX() + 7, firstPosition.getY()));
+		successfullyAddShape(secondShape);
+		assertShapeResizeOverlap(rectangle, 10, 10);
 	}
 
 }
