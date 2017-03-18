@@ -8,42 +8,58 @@ import com.schraitle.flatblox.shapes.impl.Circle;
 import com.schraitle.flatblox.shapes.impl.Rectangle;
 import com.schraitle.flatblox.shapes.impl.Square;
 
+/**
+ * Example usage of the {@link FlatSystem} coordinate system
+ * @author David
+ *
+ */
 public class ExampleProgram {
 
 	private static final int SYSTEM_HEIGHT = 50;
 	private static final int SYSTEM_WIDTH = 50;
 
 	public static void main(String[] args) {
-		// Create our 2D coordinate system
+		/*Create our 2D coordinate system*/
 		CoordinateSystem flatSystem = new FlatSystem(SYSTEM_WIDTH, SYSTEM_HEIGHT);
 		log("free space to start: " + flatSystem.getFreeSpace());
 
-		// Create some shapes for our system
+		//--------------------------------------------------------------------------
+		/*Create some shapes for our system*/
 		Shape circle = new Circle(5);
 		Shape rectangle = new Rectangle(5, 3);
 		Shape square = new Square(4);
 
-		// Set the coordinates to insert the shapes
+		//--------------------------------------------------------------------------
+		/*Set the coordinates to insert the shapes*/
 		circle.setPosition(new Coordinate(7, 7));
+		
+		// this position will make it overlap the circle
 		rectangle.setPosition(new Coordinate(10, 10));
-		// this will make the edges go OOB
+		
+		// this will make the edges go OOB when it's added
 		square.setPosition(new Coordinate(49, 49));
 
-		// Add our shapes to the system
+		//--------------------------------------------------------------------------
+		/*Add our shapes to the system*/
 		logSpacer();
 		log("adding circle to system: " + flatSystem.add(circle));
-		// going to overlap with circle
+		
+		// remember, rectangle's going to overlap with circle
 		log("adding rectangle to system: " + flatSystem.add(rectangle));
-		// put it at a different place
+		
+		// so let's put it at a different place
 		rectangle.setPosition(new Coordinate(35, 20));
 		log("adding rectangle to system at different position: " + flatSystem.add(rectangle));
-		// this will be OOB
+		
+		// remember, this one will be OOB
 		log("adding square to system: " + flatSystem.add(square));
-		// change position of square and retry
+		
+		// so we just change the starting position of square and retry
 		square.setPosition(new Coordinate(48, 48));
 		log("adding square to system at different position: " + flatSystem.add(square));
 
-		// Make the rectangle a little bigger
+		//--------------------------------------------------------------------------
+		/*Make the rectangle a little bigger*/
 		logSpacer();
 		log("beginning free space: " + flatSystem.getFreeSpace());
 		log("old rectangle properties: " + rectangle.toString());
@@ -51,13 +67,15 @@ public class ExampleProgram {
 		log("new rectangle properties: " + rectangle.toString());
 		log("new free space: " + flatSystem.getFreeSpace());
 
-		// Move the circle to a new location
+		//--------------------------------------------------------------------------
+		/*Move the circle to a new location*/
 		logSpacer();
 		log("old circle properties: " + circle.toString());
 		log("changing position of circle: " + flatSystem.move(circle, new Coordinate(15, 40)));
 		log("new circle properties: " + circle.toString());
 
-		// Find out how much free space is remaining
+		//--------------------------------------------------------------------------
+		/*Find out how much free space is remaining*/
 		logSpacer();
 		log("free space remaining: " + flatSystem.getFreeSpace());
 	}
