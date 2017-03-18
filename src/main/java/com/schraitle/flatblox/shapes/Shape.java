@@ -1,5 +1,7 @@
 package com.schraitle.flatblox.shapes;
 
+import java.util.Arrays;
+
 /**
  * Class representing an object in virtual space
  *
@@ -68,5 +70,13 @@ public abstract class Shape {
 		double xs = Math.pow(pos2.getX() - pos1.getX(), 2);
 		double ys = Math.pow(pos2.getY() - pos1.getY(), 2);
 		return Math.sqrt(xs + ys);
+	}
+	
+	@Override
+	public String toString() {
+		return "Properties: " + Arrays.toString(getSizeProperties())
+			+ " Area: " + getArea()
+			+ " Position: " + position.toString()
+			;
 	}
 }
