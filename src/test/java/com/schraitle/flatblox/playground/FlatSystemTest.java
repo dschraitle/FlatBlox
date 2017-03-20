@@ -5,7 +5,7 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
 import com.schraitle.flatblox.ShapeTestingBase;
-import com.schraitle.flatblox.playground.CoordinateSystem.InsertStatus;
+import com.schraitle.flatblox.playground.CoordinateSystem.ShapeStatus;
 import com.schraitle.flatblox.shapes.Coordinate;
 import com.schraitle.flatblox.shapes.Shape;
 import com.schraitle.flatblox.shapes.impl.Rectangle;
@@ -16,7 +16,7 @@ public class FlatSystemTest extends ShapeTestingBase {
 
 	@Test
 	public void flatSystemDoesntAddNullShape() {
-		assertEquals("add should return NULL_SHAPE", InsertStatus.NULL_SHAPE, system.add(null));
+		assertEquals("add should return NULL_SHAPE", ShapeStatus.NULL_SHAPE, system.add(null));
 	}
 
 	@Test

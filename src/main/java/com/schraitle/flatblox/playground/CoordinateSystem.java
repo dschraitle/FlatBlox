@@ -11,7 +11,7 @@ import com.schraitle.flatblox.shapes.Shape;
  */
 public interface CoordinateSystem {
 	
-	public enum InsertStatus {
+	public enum ShapeStatus {
 		/** adding shape was successful */
 		SUCCESS,
 		/** the shape would have gone out of the boundaries of the system */
@@ -21,19 +21,21 @@ public interface CoordinateSystem {
 		/** the shape is null */
 		NULL_SHAPE,
 		/** there are no coordinates in the shape */
-		NO_COORDINATES
+		NO_COORDINATES, 
+		/** the shape does not already exist in system */
+		SHAPE_NOT_EXIST
 	}
 
 	/**
 	 * adds a shape to the space at the given coordinate
 	 * @param shape the shape to be added
-	 * @return {@link InsertStatus#SUCCESS} if successful, otherwise the appropriate status will be returned
+	 * @return {@link ShapeStatus#SUCCESS} if successful, otherwise the appropriate status will be returned
 	 */
-	public InsertStatus add(Shape shape);
+	public ShapeStatus add(Shape shape);
 	
-	public InsertStatus move(Shape shape, Coordinate newPosition);
+	public ShapeStatus move(Shape shape, Coordinate newPosition);
 	
-	public InsertStatus resize(Shape shape, int... args);
+	public ShapeStatus resize(Shape shape, int... args);
 	
 	/**
 	 * @return list of all shapes represented in system

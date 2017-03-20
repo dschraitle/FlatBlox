@@ -5,7 +5,7 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 
 import com.schraitle.flatblox.playground.CoordinateSystem;
-import com.schraitle.flatblox.playground.CoordinateSystem.InsertStatus;
+import com.schraitle.flatblox.playground.CoordinateSystem.ShapeStatus;
 import com.schraitle.flatblox.playground.FlatSystem;
 import com.schraitle.flatblox.shapes.Coordinate;
 import com.schraitle.flatblox.shapes.Shape;
@@ -47,42 +47,42 @@ public class ShapeTestingBase {
 	}
 
 	protected void assertShapeResizeSuccess(Shape shape, int... properties) {
-		assertEquals("resize should be successful", InsertStatus.SUCCESS, system.resize(shape, properties));
+		assertEquals("resize should be successful", ShapeStatus.SUCCESS, system.resize(shape, properties));
 	}
 
 	protected void assertShapeResizeOOB(Shape shape, int... properties) {
-		assertEquals("resize should be out of bounds", InsertStatus.OUT_OF_BOUNDS, system.resize(shape, properties));
+		assertEquals("resize should be out of bounds", ShapeStatus.OUT_OF_BOUNDS, system.resize(shape, properties));
 	}
 
 	protected void assertShapeResizeOverlap(Shape shape, int... properties) {
-		assertEquals("resize should be overlapping", InsertStatus.OVERLAP, system.resize(shape, properties));
+		assertEquals("resize should be overlapping", ShapeStatus.OVERLAP, system.resize(shape, properties));
 	}
 
 	protected void assertSuccessfulMove(Shape shape, Coordinate position) {
-		InsertStatus moveStatus = system.move(shape, position);
-		assertEquals("the move should have succeeded", InsertStatus.SUCCESS, moveStatus);
+		ShapeStatus moveStatus = system.move(shape, position);
+		assertEquals("the move should have succeeded", ShapeStatus.SUCCESS, moveStatus);
 	}
 
 	protected void assertOOBMove(Shape shape, Coordinate position) {
-		InsertStatus moveStatus = system.move(shape, position);
-		assertEquals("the move should be out of bounds", InsertStatus.OUT_OF_BOUNDS, moveStatus);
+		ShapeStatus moveStatus = system.move(shape, position);
+		assertEquals("the move should be out of bounds", ShapeStatus.OUT_OF_BOUNDS, moveStatus);
 	}
 
 	protected void assertOverlapMove(Shape shape, Coordinate position) {
-		InsertStatus moveStatus = system.move(shape, position);
-		assertEquals("the move should be overlapping", InsertStatus.OVERLAP, moveStatus);
+		ShapeStatus moveStatus = system.move(shape, position);
+		assertEquals("the move should be overlapping", ShapeStatus.OVERLAP, moveStatus);
 	}
 
 	protected void successfullyAddShape(Shape shape) {
-		assertEquals("add should be successful", InsertStatus.SUCCESS, system.add(shape));
+		assertEquals("add should be successful", ShapeStatus.SUCCESS, system.add(shape));
 	}
 
 	protected void addOutOfBoundsShape(Shape shape) {
-		assertEquals("shape should be out of bounds", InsertStatus.OUT_OF_BOUNDS, system.add(shape));
+		assertEquals("shape should be out of bounds", ShapeStatus.OUT_OF_BOUNDS, system.add(shape));
 	}
 
 	protected void addOverlappingShape(Shape shape) {
-		assertEquals("shape should be overlapping", InsertStatus.OVERLAP, system.add(shape));
+		assertEquals("shape should be overlapping", ShapeStatus.OVERLAP, system.add(shape));
 	}
 
 }

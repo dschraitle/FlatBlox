@@ -20,24 +20,24 @@ public class FlatSystem implements CoordinateSystem {
 		shapes = new ArrayList<Shape>();
 	}
 
-	public InsertStatus add(Shape shape) {
+	public ShapeStatus add(Shape shape) {
 		if (shape == null) {
-			return InsertStatus.NULL_SHAPE;
+			return ShapeStatus.NULL_SHAPE;
 		}
 		if (shape.getPosition() == null) {
-			return InsertStatus.NO_COORDINATES;
+			return ShapeStatus.NO_COORDINATES;
 		}
 
 		if (shapeOverlapsWithOtherShapes(shape)) {
-			return InsertStatus.OVERLAP;
+			return ShapeStatus.OVERLAP;
 		}
 
 		if (shapeOutOfBounds(shape)) {
-			return InsertStatus.OUT_OF_BOUNDS;
+			return ShapeStatus.OUT_OF_BOUNDS;
 		}
 
 		addShapeToSystem(shape);
-		return InsertStatus.SUCCESS;
+		return ShapeStatus.SUCCESS;
 	}
 
 	private boolean shapeOutOfBounds(Shape shape) {
@@ -74,9 +74,12 @@ public class FlatSystem implements CoordinateSystem {
 		freeSpace = freeSpace - shape.getArea();
 	}
 
-	private void removeShapeFromSystem(Shape shape) {
-		shapes.remove(shape);
+	private boolean removeShapeFromSystem(Shape shape) {
+		if(!shapes.remove(shape)) {
+			return false;
+		}
 		freeSpace = freeSpace + shape.getArea();
+		return true;
 	}
 
 	public List<Shape> getShapes() {
@@ -88,14 +91,16 @@ public class FlatSystem implements CoordinateSystem {
 	}
 
 	@Override
-	public InsertStatus move(Shape shape, Coordinate newPosition) {
+	public ShapeStatus move(Shape shape, Coordinate newPosition) {
 		Coordinate oldPos = shape.getPosition();
-		removeShapeFromSystem(shape);
+		if(!removeShapeFromSystem(shape)) {
+			return ShapeStatus.SHAPE_NOT_EXIST;
+		}
 		shape.setPosition(newPosition);
 		
-		InsertStatus status = add(shape);
+		ShapeStatus status = add(shape);
 		
-		if(!InsertStatus.SUCCESS.equals(status)) {
+		if(!ShapeStatus.SUCCESS.equals(status)) {
 			shape.setPosition(oldPos);
 			add(shape);
 		}
@@ -103,14 +108,16 @@ public class FlatSystem implements CoordinateSystem {
 	}
 
 	@Override
-	public InsertStatus resize(Shape shape, int... properties) {
+	public ShapeStatus resize(Shape shape, int... properties) {
 		int[] oldProps = shape.getSizeProperties();
-		removeShapeFromSystem(shape);
+		if(!removeShapeFromSystem(shape)) {
+			return ShapeStatus.SHAPE_NOT_EXIST;
+		}
 		shape.changeSize(properties);
 		
-		InsertStatus status = add(shape);
+		ShapeStatus status = add(shape);
 		
-		if(!InsertStatus.SUCCESS.equals(status)) {
+		if(!ShapeStatus.SUCCESS.equals(status)) {
 			shape.changeSize(oldProps);
 			add(shape);
 		}
