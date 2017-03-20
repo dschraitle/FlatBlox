@@ -9,6 +9,7 @@ import com.schraitle.flatblox.playground.CoordinateSystem.ShapeStatus;
 import com.schraitle.flatblox.shapes.Coordinate;
 import com.schraitle.flatblox.shapes.Shape;
 import com.schraitle.flatblox.shapes.impl.Rectangle;
+import com.schraitle.flatblox.shapes.impl.Triangle;
 
 public class FlatSystemTest extends ShapeTestingBase {
 
@@ -53,14 +54,14 @@ public class FlatSystemTest extends ShapeTestingBase {
 		rectangle.setPosition(slightlyOOBPosition);
 		addOutOfBoundsShape(rectangle);
 	}
-	
+
 	@Test
 	public void shapeOneUnitOutOfBoundsFails() {
-		rectangle.changeSize(10,10);
+		rectangle.changeSize(10, 10);
 		rectangle.setPosition(new Coordinate(4, 10));
 		addOutOfBoundsShape(rectangle);
 	}
-	
+
 	@Test
 	public void shapeHalfUnitOutOfBoundsFails() {
 		rectangle.changeSize(5, 5);
@@ -101,7 +102,7 @@ public class FlatSystemTest extends ShapeTestingBase {
 		newShape.setPosition(firstPosition);
 		successfullyAddShape(newShape);
 	}
-	
+
 	@Test
 	public void shapeFailsToOverlapAfterMove() {
 		successfullyAddShape(rectangle);
@@ -110,13 +111,14 @@ public class FlatSystemTest extends ShapeTestingBase {
 		successfullyAddShape(secondShape);
 		assertOverlapMove(rectangle, secondPosition);
 	}
-	
+
 	@Test
 	public void shapeCanResize() {
 		successfullyAddShape(rectangle);
 		assertShapeResizeSuccess(rectangle, 10, 10);
 		assertEquals("area of shape should be 100", 100, rectangle.getArea(), DOUBLE_EPSILON);
-		assertEquals("free space in system should be less", DEFAULT_FREE_SPACE - 100, system.getFreeSpace(), DOUBLE_EPSILON);
+		assertEquals("free space in system should be less", DEFAULT_FREE_SPACE - 100, system.getFreeSpace(),
+				DOUBLE_EPSILON);
 	}
 
 	@Test
@@ -126,7 +128,7 @@ public class FlatSystemTest extends ShapeTestingBase {
 		assertShapeResizeOOB(rectangle, 11, 6);
 		assertEquals("the shape should have the original area", orignalArea, rectangle.getArea(), DOUBLE_EPSILON);
 	}
-	
+
 	@Test
 	public void shapeFailsToResizeOverlap() {
 		successfullyAddShape(rectangle);

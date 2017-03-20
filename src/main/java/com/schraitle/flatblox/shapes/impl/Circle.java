@@ -27,12 +27,12 @@ public class Circle extends Shape {
 
 	@Override
 	public int[] getSizeProperties() {
-		return new int[]{radius};
+		return new int[] { radius };
 	}
 
 	@Override
 	public void changeSize(int... newSize) {
-		if(newSize.length > 1) {
+		if (newSize.length < 1) {
 			return;
 		}
 		this.radius = newSize[0];

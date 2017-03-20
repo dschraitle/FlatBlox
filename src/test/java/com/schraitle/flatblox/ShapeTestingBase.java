@@ -41,7 +41,7 @@ public class ShapeTestingBase {
 		rectangle.setPosition(firstPosition);
 		square = new Square(SHAPE_WIDTH);
 		square.setPosition(firstPosition);
-		
+
 		circle = new Circle(SHAPE_WIDTH);
 		circle.setPosition(firstPosition);
 	}

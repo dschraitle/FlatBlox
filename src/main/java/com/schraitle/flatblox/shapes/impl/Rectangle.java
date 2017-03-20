@@ -24,12 +24,13 @@ public class Rectangle extends Shape {
 
 	@Override
 	public double getRadius() {
+		// distance formula from center of object, to extreme corner
 		return Math.sqrt(Math.pow(width / 2, 2) + Math.pow(height / 2, 2));
 	}
 
 	@Override
 	public void changeSize(int... newSize) {
-		if(newSize.length > 2) {
+		if (newSize.length < 2) {
 			return;
 		}
 		this.width = newSize[0];
@@ -38,7 +39,7 @@ public class Rectangle extends Shape {
 
 	@Override
 	public int[] getSizeProperties() {
-		return new int[]{width, height};
+		return new int[] { width, height };
 	}
 
 }
